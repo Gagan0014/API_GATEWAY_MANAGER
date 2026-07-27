@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY backend/package*.json ./
 
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
-COPY backend .
+COPY backend/ .
 
 FROM node:16-alpine
 
