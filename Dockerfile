@@ -1,24 +1,20 @@
-# Multi-stage build for GenAI API Gateway
-
-# Stage 1: Install dependencies
 FROM node:16-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY backend/package*.json ./
 
-# Use npm install because package-lock.json is missing
 RUN npm install --omit=dev
 
-# Stage 2: Runtime
+COPY backend .
+
 FROM node:16-alpine
 
 WORKDIR /app
 
 RUN apk add --no-cache dumb-init
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY . .
+COPY --from=builder /app .
 
 ENV NODE_ENV=production
 
